@@ -1,0 +1,9 @@
+name: Webhook Summary
+description: TODO
+inputs:
+  url:
+    description: Webhook URL
+    required: true
+runs:
+  using: node16
+  main: build/index.cjs

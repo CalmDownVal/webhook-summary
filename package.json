@@ -1,0 +1,16 @@
+{
+	"name": "@calmdownval/webhook-summary",
+	"version": "1.0.0",
+	"description": "TODO",
+	"license": "MIT",
+	"scripts": {
+		"build": "esbuild --outfile=./build/index.cjs ./src/index.mjs"
+	},
+	"dependencies": {
+		"@actions/core": "1.8.0",
+		"node-fetch": "3.2.4"
+	},
+	"devDependencies": {
+		"esbuild": "0.14.38"
+	}
+}

@@ -1,6 +1,6 @@
 # Webhook Summary
 
-A GitHub Action for simple pipeline summaries sent via webhooks.
+A GitHub Action for simple pipeline summaries sent via Discord webhooks.
 
 ## Usage
 
@@ -15,7 +15,7 @@ Add a new job to your workflow with this action as its only step:
       - job_two
       # ...
     steps:
-    - uses: CalmDownVal/webhook-summary@master
+    - uses: CalmDownVal/webhook-summary@v1
       with:
         token: ${{ github.token }}
         url: ${{ secrets.WEBHOOK_URL }}

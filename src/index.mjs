@@ -35,6 +35,7 @@ async function main() {
 	let hasFailedJobs = false;
 
 	for (const job of jobs) {
+		// FUTURE: `github.context.job` is really the job's key, not its name. There's currently no way to get the key from the REST API...
 		if (job.name === github.context.job) {
 			continue;
 		}
@@ -48,10 +49,10 @@ async function main() {
 			name: job.name,
 			inline: true,
 			value: (
-				isFailed
-					? '🔴 FAILED'
-					: isPending
-						? '⌛ pending...'
+				isPending
+					? '⌛ pending...'
+					: isFailed
+						? '🔴 FAILED'
 						: '🟢 passing'
 			)
 		});

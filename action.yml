@@ -1,6 +1,9 @@
 name: Webhook Summary
-description: TODO
+description: A GitHub Action for simple pipeline summaries sent via webhooks.
 inputs:
+  token:
+    description: A token authorized to call GitHub REST API
+    required: true
   url:
     description: Webhook URL
     required: true

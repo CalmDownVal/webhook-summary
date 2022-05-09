@@ -1,14 +1,15 @@
 {
 	"name": "@calmdownval/webhook-summary",
-	"version": "1.0.0",
-	"description": "TODO",
+	"version": "0.0.1",
+	"description": "A GitHub Action for simple pipeline summaries sent via webhooks.",
 	"license": "MIT",
 	"scripts": {
-		"build": "esbuild --outfile=./build/index.cjs ./src/index.mjs"
+		"build": "esbuild --bundle --platform=node --target=node16 --minify --sourcemap --outfile=./build/index.cjs ./src/index.mjs"
 	},
 	"dependencies": {
 		"@actions/core": "1.8.0",
-		"node-fetch": "3.2.4"
+		"@actions/github": "5.0.1",
+		"@actions/http-client": "1.0.11"
 	},
 	"devDependencies": {
 		"esbuild": "0.14.38"

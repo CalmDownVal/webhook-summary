@@ -26,11 +26,12 @@ job will always run last.
 
 ## Naming
 
-It is important not to name the job with a custom name. GitHub Actions will then
-automatically assign the key as its name (i.e. name will be `send-summary`).
+It is important *not* to name the job with a custom name. This ensures GitHub
+Actions will assign the name to the same string as its key (in the above example
+name will be set to `send-summary`).
 
-If you rename the action to anything else, the script will fail to identify the
-job and it will be included in the summary.
+If you rename the action to anything else, the script will fail to identify its
+job and include it in the summary.
 
 This awkward requirement is due to a missing feature in GitHub's APIs that makes
 reliably identifying jobs by their key almost impossible:

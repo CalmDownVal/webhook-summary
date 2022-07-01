@@ -59,7 +59,8 @@ async function main() {
 	}
 
 	const embed = {
-		title: `${run.repository.name} ${run.name} Summary`,
+		title: `${run.name} Summary - ${run.repository.name}`,
+		description: run.head_commit.message,
 		url: `${run.repository.html_url}/actions/runs/${run.id}`,
 		color: (
 			hasFailedJobs

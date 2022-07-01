@@ -1,6 +1,6 @@
 {
 	"name": "@calmdownval/webhook-summary",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "A GitHub Action for simple pipeline summaries sent via webhooks.",
 	"license": "MIT",
 	"scripts": {

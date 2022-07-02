@@ -1,5 +1,8 @@
 name: Webhook Summary
 description: A GitHub Action for simple pipeline summaries sent via webhooks.
+branding:
+  icon: send
+  color: purple
 inputs:
   token:
     description: A token authorized to call GitHub REST API

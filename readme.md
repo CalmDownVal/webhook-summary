@@ -21,8 +21,8 @@ Add a new job to your workflow with this action as its only step:
         url: ${{ secrets.WEBHOOK_URL }}
 ```
 
-Fill in its `needs` array to include all the previous step. This way the summary
-job will always run last.
+Fill in the `needs` array to include all previous jobs. This ensures the summary
+job always runs last.
 
 ## Naming
 
@@ -34,7 +34,7 @@ If you rename the action to anything else, the script will fail to identify its
 job and include it in the summary.
 
 This awkward requirement is due to a missing feature in GitHub's APIs that makes
-reliably identifying jobs by their key almost impossible:
+reliably identifying jobs impossible:
 
 - https://github.community/t/job-id-is-string-in-github-job-but-integer-in-actions-api/139060
 - https://github.com/github/feedback/discussions/8945

@@ -4,7 +4,7 @@
 	"description": "A GitHub Action for simple pipeline summaries sent via webhooks.",
 	"license": "MIT",
 	"scripts": {
-		"build": "esbuild --bundle --platform=node --target=node16 --minify --sourcemap --outfile=./build/index.cjs ./src/index.mjs"
+		"build": "esbuild --bundle --platform=node --target=node16 --minify --sourcemap --outfile=./build/index.min.cjs ./src/index.mjs"
 	},
 	"dependencies": {
 		"@actions/core": "1.8.0",

@@ -9,7 +9,7 @@ async function main() {
 
 	const api = github.getOctokit(token);
 
-	// get necessary info about the current run
+	// get info about the current run
 	const workflowResponse = await api.rest.actions.getWorkflowRun({
 		owner: github.context.repo.owner,
 		repo: github.context.repo.repo,
@@ -35,7 +35,7 @@ async function main() {
 	let hasFailedJobs = false;
 
 	for (const job of jobs) {
-		// FUTURE: `github.context.job` is really the job's key, not its name. There's currently no way to get the key from the REST API...
+		// FUTURE: `github.context.job` is actually the job's key, not its name. There's currently no way to get the key from the REST API...
 		if (job.name === github.context.job) {
 			continue;
 		}

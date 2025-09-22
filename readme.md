@@ -15,7 +15,7 @@ Add a new job to your workflow with this action as its only step:
       - job_two
       # ...
     steps:
-    - uses: CalmDownVal/webhook-summary@v1
+    - uses: CalmDownVal/webhook-summary@v2
       with:
         token: ${{ github.token }}
         url: ${{ secrets.WEBHOOK_URL }}

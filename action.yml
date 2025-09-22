@@ -10,6 +10,9 @@ inputs:
   url:
     description: Webhook URL
     required: true
+  job_id:
+    description: The ID of the summary job
+    required: false
 runs:
-  using: node16
+  using: node24
   main: build/index.min.cjs

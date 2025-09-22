@@ -1,19 +1,20 @@
-import * as core from '@actions/core';
-import * as github from '@actions/github';
-import { HttpClient } from '@actions/http-client';
+import * as core from "@actions/core";
+import * as github from "@actions/github";
+import { HttpClient } from "@actions/http-client";
 
 async function main() {
 	// get inputs
-	const token = core.getInput('token', { required: true });
-	const url = core.getInput('url', { required: true });
+	const githubToken = core.getInput("token", { required: true });
+	const webhookUrl = core.getInput("url", { required: true });
+	const jobId = parseInt(core.getInput("job_id"));
 
-	const api = github.getOctokit(token);
+	const api = github.getOctokit(githubToken);
 
 	// get info about the current run
 	const workflowResponse = await api.rest.actions.getWorkflowRun({
 		owner: github.context.repo.owner,
 		repo: github.context.repo.repo,
-		run_id: github.context.runId
+		run_id: github.context.runId,
 	});
 
 	assertStatusCodeOk(workflowResponse.status);
@@ -23,7 +24,7 @@ async function main() {
 		owner: run.repository.owner.login,
 		repo: run.repository.name,
 		run_id: run.id,
-		attempt_number: run.run_attempt
+		attempt_number: run.run_attempt,
 	});
 
 	assertStatusCodeOk(jobsResponse.status);
@@ -35,13 +36,12 @@ async function main() {
 	let hasFailedJobs = false;
 
 	for (const job of jobs) {
-		// FUTURE: `github.context.job` is actually the job's key, not its name. There's currently no way to get the key from the REST API...
-		if (job.name === github.context.job) {
+		if (job.id === jobId) {
 			continue;
 		}
 
-		const isPending = job.status !== 'completed';
-		const isFailed = job.conclusion !== 'success';
+		const isPending = job.status !== "completed";
+		const isFailed = job.conclusion === "failure";
 		hasPendingJobs = hasPendingJobs || isPending;
 		hasFailedJobs = hasFailedJobs || isFailed;
 
@@ -50,18 +50,20 @@ async function main() {
 			inline: true,
 			value: (
 				isPending
-					? '⌛ pending...'
+					? "⌛ pending..."
 					: isFailed
-						? '🔴 FAILED'
-						: '🟢 passing'
-			)
+						? "🔴 FAILED"
+						: "🟢 passing"
+			),
 		});
 	}
 
-	const embed = {
+	const commitUrl = `${run.repository.html_url}/commit/${run.head_sha}`;
+	const pipelineUrl = `${run.repository.html_url}/actions/runs/${run.id}`;
+	const detailsEmbed = {
 		title: `${run.name} Summary - ${run.repository.name}`,
 		description: run.head_commit.message,
-		url: `${run.repository.html_url}/actions/runs/${run.id}`,
+		url: commitUrl,
 		color: (
 			hasFailedJobs
 				? 0xc90048
@@ -74,19 +76,45 @@ async function main() {
 		author: {
 			name: run.actor.login,
 			url: run.actor.html_url,
-			icon_url: run.actor.avatar_url
+			icon_url: run.actor.avatar_url,
 		},
 		footer: {
-			text: run.head_sha.slice(0, 7)
-		}
+			text: run.head_sha.slice(0, 7),
+		},
+	};
+
+	const viewCommitButton = {
+		type: 2, // button
+		style: 5, // link
+		label: "Commit",
+		url: commitUrl,
+		emoji: { name: "📜" },
+	};
+
+	const viewPipelineButton = {
+		type: 2, // button
+		style: 5, // link
+		label: "Pipeline",
+		url: pipelineUrl,
+		emoji: { name: "▶️" },
 	};
 
 	// invoke the webhook
+	const callUrl = new URL(webhookUrl);
+	callUrl.searchParams.set("with_components", "true");
+
 	const client = new HttpClient();
-	const response = await client.postJson(url, {
-		embeds: [
-			embed
-		]
+	const response = await client.postJson(callUrl.href, {
+		embeds: [ detailsEmbed ],
+		components: [
+			{
+				type: 1, // action row,
+				components: [
+					viewCommitButton,
+					viewPipelineButton,
+				],
+			},
+		],
 	});
 
 	assertStatusCodeOk(response.statusCode);
@@ -103,6 +131,6 @@ function assertStatusCodeOk(statusCode) {
 		await main();
 	}
 	catch (ex) {
-		core.error('' + ex);
+		core.error("" + ex);
 	}
 })();
